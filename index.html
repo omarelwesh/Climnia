@@ -1,12 +1,219 @@
-<!DOCTYPE html>
-<html lang="ar">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة فارغة</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كليمنيا - متجر الفواكه والخضروات</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero {
+      background-image: url('your-image.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      text-shadow: 2px 2px 8px #000;
+    }
+    .products {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .product input {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+    }
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    .cart {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      background: white;
+      padding: 10px;
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .cart h4 {
+      margin-top: 0;
+    }
+    .cart ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .cart li {
+      margin-bottom: 5px;
+    }
+    .cart .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .cart .checkout-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 8px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    #checkout-page {
+      display: none;
+      padding: 20px;
+      background: white;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    #checkout-page h2 {
+      margin-top: 0;
+    }
+    #checkout-page input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #checkout-page button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div><strong>كليمنيا</strong></div>
+    <nav>
+      <a href="#home">الرئيسية</a>
+      <a href="#vegetables">الخضروات</a>
+      <a href="#fruits">الفواكه</a>
+      <a href="#contact">اتصل بنا</a>
+    </nav>
+  </header>
+  <div class="hero">مرحبا بكم في كليمنيا!</div>  <section id="vegetables" class="products">
+    <div class="product">
+      <img src="veg1.jpg" alt="طماطم">
+      <h3>طماطم</h3>
+      <p>السعر: 3 د.ل/كغ</p>
+      <input type="number" placeholder="أدخل الوزن بالغرام" min="1" onchange="addToCart(this, 'طماطم', 3)">
+      <button onclick="addToCartManual(this.previousElementSibling, 'طماطم', 3)">أضف للسلة</button>
+    </div>
+  </section>  <section id="fruits" class="products">
+    <div class="product">
+      <img src="fruit1.jpg" alt="تفاح">
+      <h3>تفاح</h3>
+      <p>السعر: 5 د.ل/كغ</p>
+      <input type="number" placeholder="أدخل الوزن بالغرام" min="1" onchange="addToCart(this, 'تفاح', 5)">
+      <button onclick="addToCartManual(this.previousElementSibling, 'تفاح', 5)">أضف للسلة</button>
+    </div>
+  </section>  <div class="cart">
+    <h4>سلة المشتريات</h4>
+    <ul id="cart-items"></ul>
+    <div class="total">المجموع: <span id="cart-total">0</span> د.ل</div>
+    <button class="checkout-btn" onclick="showCheckout()">إتمام الشراء</button>
+  </div>  <div id="checkout-page">
+   <div id="checkout-page">
+  <h2>إتمام الشراء</h2>
+  <form action="send.php" method="POST">
+    <input type="text" name="name" placeholder="الاسم الكامل" required>
+    <input type="text" name="location" placeholder="العنوان بالتحديد">
+    <textarea name="order" id="order-details" hidden></textarea>
+    <button type="submit" onclick="fillOrderDetails()">إرسال الطلب</button>
+  </form>
+</div>
+  </div>  <footer id="contact">
+    <p>اتصل بنا عبر الهاتف: 0912345678</p>
+    <p>التوصيل متاح في طرابلس وما حولها - السعر حسب الموقع</p>
+  </footer>  <script>
+    let cartItems = [];
 
-</body>
+    function addToCart(input, name, pricePerKg) {
+      const grams = parseFloat(input.value);
+      if (!grams || grams <= 0) return;
+      const kg = grams / 1000;
+      const price = (kg * pricePerKg).toFixed(2);
+      cartItems.push({ name, grams, price });
+      renderCart();
+      input.value = '';
+    }
+
+    function addToCartManual(input, name, pricePerKg) {
+      addToCart(input, name, pricePerKg);
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cart-items');
+      list.innerHTML = '';
+      let total = 0;
+      cartItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - ${item.grams}غ - ${item.price} د.ل`;
+        list.appendChild(li);
+        total += parseFloat(item.price);
+      });
+      document.getElementById('cart-total').textContent = total.toFixed(2);
+    }
+
+    function showCheckout() {
+      document.getElementById('checkout-page').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('checkout-page').offsetTop, behavior: 'smooth' });
+    }
+
+    function submitOrder() {
+      alert('تم إرسال الطلب بنجاح! سيتم التواصل معك قريبًا.');
+    }
+  </script></body>
 </html>
