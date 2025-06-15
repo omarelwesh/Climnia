@@ -3,133 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إتمام الشراء - كليمنيا</title>
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+  <title>إتمام الشراء</title>
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background: #f1f1f1;
+      background-color: #f9f9f9;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    form {
-      max-width: 700px;
+    .container {
+      max-width: 600px;
       margin: auto;
-      background: #fff;
+      background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    label {
+    label, input, button {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input[type="text"], textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    #map {
-      height: 300px;
-      margin-top: 10px;
+      margin-bottom: 15px;
     }
     button {
-      margin-top: 20px;
       background-color: #4CAF50;
       color: white;
-      padding: 10px 20px;
+      padding: 10px;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
+      font-size: 16px;
+    }
+    #map {
+      width: 100%;
+      height: 300px;
+      margin-bottom: 20px;
+    }
+    #submitBtn:disabled {
+      background-color: grey;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
-  <h1>إتمام الشراء</h1>
-  <form id="checkoutForm" action="send.php" method="POST">
-    <label>الاسم الكامل:</label>
-    <input type="text" name="fullname" required>
+  <div class="container">
+    <h2>إتمام الشراء</h2>
+    <label for="fullname">الاسم الكامل:</label>
+    <input type="text" id="fullname" placeholder="اكتب اسمك هنا">
 
-    <label>اختيار الموقع على الخريطة:</label>
+    <button onclick="getLocation()">اختيار موقعك عبر الخريطة</button>
     <div id="map"></div>
-    <input type="hidden" name="latitude" id="latitude">
-    <input type="hidden" name="longitude" id="longitude">
-    <input type="hidden" name="deliveryCost" id="deliveryCost">
 
-    <label>تفاصيل الطلب:</label>
-    <textarea name="orderDetails" id="orderDetails" rows="5" readonly>
-تفاح - 600غ - 3.00 د.ل
-برتقال - 1200غ - 6.00 د.ل
-    </textarea>
+    <h3>مشترياتك:</h3>
+    <ul id="cart-items"></ul>
+    <p><strong>المجموع بدون توصيل:</strong> <span id="total-price">0</span> د.ل</p>
+    <p><strong>تكلفة التوصيل:</strong> <span id="delivery-price">0</span> د.ل</p>
+    <p><strong>الإجمالي:</strong> <span id="final-price">0</span> د.ل</p>
 
-    <label>إجمالي السعر (بدون توصيل):</label>
-    <input type="text" name="totalPrice" id="totalPrice" value="9.00 د.ل" readonly>
+    <button id="submitBtn" onclick="submitOrder()">إتمام الشراء</button>
+  </div>
 
-    <label>تكلفة التوصيل:</label>
-    <input type="text" id="deliveryCostDisplay" readonly>
-
-    <label>الإجمالي مع التوصيل:</label>
-    <input type="text" name="finalTotal" id="finalTotal" readonly>
-
-    <button type="submit">شراء الآن</button>
-  </form>
-
-<script>
-  const storeLat = 32.37535;
-  const storeLng = 15.09254;
-
-  function initMap() {
-    const defaultPos = { lat: 32.38, lng: 15.08 };
-    const map = new google.maps.Map(document.getElementById("map"), {
-      center: defaultPos,
-      zoom: 13
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = 0;
+    const list = document.getElementById('cart-items');
+    cart.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.name} - ${item.grams} غ - ${item.price.toFixed(2)} د.ل`;
+      list.appendChild(li);
+      total += item.price;
     });
+    document.getElementById('total-price').textContent = total.toFixed(2);
 
-    let marker;
-    map.addListener("click", function(e) {
-      if (marker) marker.setMap(null);
-      marker = new google.maps.Marker({ position: e.latLng, map: map });
+    let userLat = null;
+    let userLng = null;
 
-      const lat = e.latLng.lat();
-      const lng = e.latLng.lng();
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showMap);
+      } else {
+        alert("المتصفح لا يدعم تحديد الموقع.");
+      }
+    }
 
-      document.getElementById("latitude").value = lat;
-      document.getElementById("longitude").value = lng;
+    function showMap(position) {
+      userLat = position.coords.latitude;
+      userLng = position.coords.longitude;
 
-      const distance = getDistanceFromLatLonInKm(storeLat, storeLng, lat, lng);
-      const delivery = (distance * 2.5).toFixed(2);
-      const basePrice = 9.00;
-      const total = (basePrice + parseFloat(delivery)).toFixed(2);
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: userLat, lng: userLng },
+        zoom: 14,
+      });
 
-      document.getElementById("deliveryCost").value = delivery;
-      document.getElementById("deliveryCostDisplay").value = delivery + " د.ل";
-      document.getElementById("finalTotal").value = total + " د.ل";
-    });
-  }
+      let marker = new google.maps.Marker({
+        position: { lat: userLat, lng: userLng },
+        map,
+        draggable: true,
+      });
 
-  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
+      marker.addListener("dragend", () => {
+        userLat = marker.getPosition().lat();
+        userLng = marker.getPosition().lng();
+        calculateDelivery();
+      });
 
-  function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-  }
+      calculateDelivery();
+    }
 
-  window.onload = initMap;
-</script>
+    function calculateDelivery() {
+      const shopLat = 32.8866;
+      const shopLng = 13.1900;
+      const R = 6371;
+      const dLat = toRad(userLat - shopLat);
+      const dLng = toRad(userLng - shopLng);
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(toRad(shopLat)) * Math.cos(toRad(userLat)) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c;
+
+      let delivery = 0;
+      if (distance > 3) {
+        alert("عذرًا، لا نقوم بالتوصيل لأكثر من 3 كم من المتجر.");
+        document.getElementById("submitBtn").disabled = true;
+        delivery = 0;
+      } else {
+        delivery = distance * 2.5;
+        document.getElementById("submitBtn").disabled = false;
+      }
+
+      document.getElementById('delivery-price').textContent = delivery.toFixed(2);
+      document.getElementById('final-price').textContent = (total + delivery).toFixed(2);
+    }
+
+    function toRad(Value) {
+      return Value * Math.PI / 180;
+    }
+
+    function submitOrder() {
+      alert("تم إرسال طلبك بنجاح!");
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 </body>
 </html>
-
