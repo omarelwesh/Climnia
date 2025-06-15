@@ -18,7 +18,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    label, input, button {
+    label, input, button, textarea {
       display: block;
       width: 100%;
       margin-bottom: 15px;
@@ -31,116 +31,29 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    #map {
-      width: 100%;
-      height: 300px;
-      margin-bottom: 20px;
-    }
-    #submitBtn:disabled {
-      background-color: grey;
-      cursor: not-allowed;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>إتمام الشراء</h2>
-    <label for="fullname">الاسم الكامل:</label>
-    <input type="text" id="fullname" placeholder="اكتب اسمك هنا">
+    <form action="send_order.php" method="POST" onsubmit="prepareOrder()">
+      <label for="fullname">الاسم الكامل:</label>
+      <input type="text" name="fullname" required>
 
-    <button onclick="getLocation()">اختيار موقعك عبر الخريطة</button>
-    <div id="map"></div>
+      <label for="location">العنوان (الوصف أو الموقع):</label>
+      <textarea name="location" required></textarea>
 
-    <h3>مشترياتك:</h3>
-    <ul id="cart-items"></ul>
-    <p><strong>المجموع بدون توصيل:</strong> <span id="total-price">0</span> د.ل</p>
-    <p><strong>تكلفة التوصيل:</strong> <span id="delivery-price">0</span> د.ل</p>
-    <p><strong>الإجمالي:</strong> <span id="final-price">0</span> د.ل</p>
+      <input type="hidden" name="cart" id="cart">
 
-    <button id="submitBtn" onclick="submitOrder()">إتمام الشراء</button>
+      <button type="submit">إرسال الطلب</button>
+    </form>
   </div>
 
   <script>
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let total = 0;
-    const list = document.getElementById('cart-items');
-    cart.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = `${item.name} - ${item.grams} غ - ${item.price.toFixed(2)} د.ل`;
-      list.appendChild(li);
-      total += item.price;
-    });
-    document.getElementById('total-price').textContent = total.toFixed(2);
-
-    let userLat = null;
-    let userLng = null;
-
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showMap);
-      } else {
-        alert("المتصفح لا يدعم تحديد الموقع.");
-      }
-    }
-
-    function showMap(position) {
-      userLat = position.coords.latitude;
-      userLng = position.coords.longitude;
-
-      const map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: userLat, lng: userLng },
-        zoom: 14,
-      });
-
-      let marker = new google.maps.Marker({
-        position: { lat: userLat, lng: userLng },
-        map,
-        draggable: true,
-      });
-
-      marker.addListener("dragend", () => {
-        userLat = marker.getPosition().lat();
-        userLng = marker.getPosition().lng();
-        calculateDelivery();
-      });
-
-      calculateDelivery();
-    }
-
-    function calculateDelivery() {
-      const shopLat = 32.8866;
-      const shopLng = 13.1900;
-      const R = 6371;
-      const dLat = toRad(userLat - shopLat);
-      const dLng = toRad(userLng - shopLng);
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(toRad(shopLat)) * Math.cos(toRad(userLat)) *
-                Math.sin(dLng/2) * Math.sin(dLng/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      const distance = R * c;
-
-      let delivery = 0;
-      if (distance > 3) {
-        alert("عذرًا، لا نقوم بالتوصيل لأكثر من 3 كم من المتجر.");
-        document.getElementById("submitBtn").disabled = true;
-        delivery = 0;
-      } else {
-        delivery = distance * 2.5;
-        document.getElementById("submitBtn").disabled = false;
-      }
-
-      document.getElementById('delivery-price').textContent = delivery.toFixed(2);
-      document.getElementById('final-price').textContent = (total + delivery).toFixed(2);
-    }
-
-    function toRad(Value) {
-      return Value * Math.PI / 180;
-    }
-
-    function submitOrder() {
-      alert("تم إرسال طلبك بنجاح!");
+    function prepareOrder() {
+      const cartData = localStorage.getItem("cart");
+      document.getElementById("cart").value = cartData;
     }
   </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 </body>
 </html>
