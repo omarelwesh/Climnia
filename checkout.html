@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إتمام الشراء - كليمنيا</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      margin: auto;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .contact-info {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>أدخل اسمك وموقع التوصيل</h2>
+
+  <form action="send.php" method="POST">
+    <input type="text" name="name" placeholder="الاسم الكامل" required>
+    <input type="text" name="location" placeholder="رابط الموقع من Google Maps" required>
+    <textarea name="order" placeholder="اكتب تفاصيل الطلب هنا (مثلاً: 2 كغ تفاح، 1 كغ طماطم...)" required></textarea>
+    <button type="submit">إرسال الطلب</button>
+  </form>
+
+  <div class="contact-info">
+    أو اتصل بنا مباشرة على:<br>
+    <strong>0912345678</strong>
+  </div>
+
+</body>
+</html>
