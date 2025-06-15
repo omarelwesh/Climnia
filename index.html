@@ -1,6 +1,118 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>كليمنيا - متجر الفواكه والخضروات</title>  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">  <style>    body {      margin: 0;      font-family: 'Cairo', sans-serif;      background-color: #f9f9f9;    }    header {      background-image: url('header-bg.jpg');      background-size: cover;      background-position: center;      padding: 40px 20px;      color: white;      text-align: center;      font-size: 36px;      font-weight: bold;      text-shadow: 2px 2px 8px #000;    }    nav {      background-color: #4CAF50;      display: flex;      justify-content: center;      gap: 30px;      padding: 10px;    }    nav a {      color: white;      text-decoration: none;      font-weight: bold;    }    .products {      padding: 20px;      display: grid;      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));      gap: 20px;    }    .product {      background: white;      border-radius: 10px;      padding: 10px;      box-shadow: 0 2px 8px rgba(0,0,0,0.1);    }    .product img {      width: 100%;      border-radius: 10px;    }    .product h3 {      margin: 10px 0 5px;    }    .product input {      width: 100%;      padding: 5px;      margin-top: 5px;    }    .product button {      margin-top: 5px;      width: 100%;      background: #4CAF50;      color: white;      border: none;      padding: 5px;      cursor: pointer;    }    .cart {      position: fixed;      left: 10px;      top: 100px;      background: white;      padding: 10px;      border: 1px solid #ccc;      border-radius: 10px;      width: 250px;      box-shadow: 0 2px 6px rgba(0,0,0,0.2);    }    .cart h4 {      margin-top: 0;    }    .cart-items {      max-height: 300px;      overflow-y: auto;    }    .cart-item {      display: flex;      justify-content: space-between;      margin-bottom: 5px;    }    .checkout-btn {      display: block;      width: 100%;      padding: 10px;      background: #f44336;      color: white;      border: none;      cursor: pointer;      margin-top: 10px;    }  </style></head><body>  <header>    خذ بضاعتك 🍎🥬  </header>  <nav>    <a href="#vegetables">الخضروات</a>    <a href="#fruits">الفواكه</a>    <a href="#cart">سلة المشتريات</a>  </nav>
-  <div id="cart" class="cart">    <h4>سلة المشتريات</h4>    <div class="cart-items" id="cart-items"></div>    <p><strong>المجموع:</strong> <span id="total-price">0</span> د.ل</p>    <button class="checkout-btn" onclick="window.location.href='checkout.html'">إتمام الشراء</button>  </div>
-  <section id="vegetables" class="products">    <div class="product">      <img src="tomato.jpg" alt="طماطم">      <h3>طماطم</h3>      <p>3 د.ل / كغ</p>      <input type="number" placeholder="أدخل الوزن بالغرام" min="1" id="tomato-weight">      <button onclick="addToCart('طماطم', 3, document.getElementById('tomato-weight').value)">أضف للسلة</button>    </div>    <!-- خضروات إضافية -->  </section>  <hr>  <section id="fruits" class="products">    <div class="product">      <img src="apple.jpg" alt="تفاح">      <h3>تفاح</h3>      <p>5 د.ل / كغ</p>      <input type="number" placeholder="أدخل الوزن بالغرام" min="1" id="apple-weight">      <button onclick="addToCart('تفاح', 5, document.getElementById('apple-weight').value)">أضف للسلة</button>    </div>    <div class="product">      <img src="orange.jpg" alt="برتقال">      <h3>برتقال</h3>      <p>4 د.ل / كغ</p>      <input type="number" placeholder="أدخل الوزن بالغرام" min="1" id="orange-weight">      <button onclick="addToCart('برتقال', 4, document.getElementById('orange-weight').value)">أضف للسلة</button>    </div>    <!-- فواكه إضافية -->  </section>
-  <script>    let cart = [];    function addToCart(name, pricePerKg, grams) {      if (!grams || grams <= 0) return;      const price = (grams / 1000) * pricePerKg;      cart.push({ name, grams, price });      updateCart();    }
-    function updateCart() {      const cartItemsDiv = document.getElementById('cart-items');      const totalSpan = document.getElementById('total-price');      cartItemsDiv.innerHTML = '';      let total = 0;      cart.forEach(item => {        total += item.price;        const div = document.createElement('div');        div.className = 'cart-item';        div.textContent = `${item.name}: ${item.grams}غ - ${item.price.toFixed(2)} د.ل`;        cartItemsDiv.appendChild(div);      });      totalSpan.textContent = total.toFixed(2);    }  </script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كليمنيا - متجر الفواكه والخضروات</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background-color: #f9f9f9;
+    }
+    .hero {
+      background-image: url('header-bg.jpg'); /* استبدلها بالصورة التي أرسلتها */
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      text-shadow: 2px 2px 8px #000;
+    }
+    .products {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .product input {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+    }
+    .cart {
+      position: fixed;
+      left: 10px;
+      top: 100px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 200px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .checkout-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">خذ بضاعتك من كليمنيا!</div>
+
+  <section class="products">
+    <div class="product">
+      <img src="tomato.jpg" alt="طماطم">
+      <h3>طماطم</h3>
+      <p>السعر: 3 د.ل/كغ</p>
+      <input type="number" placeholder="أدخل الوزن بالغرام" min="1">
+      <button>أضف للسلة</button>
+    </div>
+    <div class="product">
+      <img src="apple.jpg" alt="تفاح">
+      <h3>تفاح</h3>
+      <p>السعر: 5 د.ل/كغ</p>
+      <input type="number" placeholder="أدخل الوزن بالغرام" min="1">
+      <button>أضف للسلة</button>
+    </div>
+    <div class="product">
+      <img src="orange.jpg" alt="برتقال">
+      <h3>برتقال</h3>
+      <p>السعر: 4 د.ل/كغ</p>
+      <input type="number" placeholder="أدخل الوزن بالغرام" min="1">
+      <button>أضف للسلة</button>
+    </div>
+  </section>
+
+  <div class="cart">
+    <h4>سلة المشتريات</h4>
+    <ul id="cart-list"></ul>
+    <p>الإجمالي: <span id="total-price">0</span> د.ل</p>
+    <button class="checkout-btn" onclick="window.location.href='checkout.html'">إتمام الشراء</button>
+  </div>
+
+  <footer>
+    <p>اتصل بنا عبر الهاتف: 0912345678</p>
+    <p>التوصيل متاح في طرابلس وما حولها - السعر حسب الموقع</p>
+  </footer>
+</body>
+</html>
 
