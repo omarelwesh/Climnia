@@ -1,29 +1,36 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // عنوان الإيميل الذي تريد استلام الطلبات عليه
     $to = "omarelwesh801@gmail.com";
+    $subject = "طلب شراء جديد من موقع كليمنيا";
 
-    // عنوان الرسالة
-    $subject = "طلب جديد من موقع كليمنيا";
+    $name = htmlspecialchars($_POST["fullname"]);
+    $lat = htmlspecialchars($_POST["latitude"]);
+    $lng = htmlspecialchars($_POST["longitude"]);
+    $orderDetails = htmlspecialchars($_POST["orderDetails"]);
+    $totalPrice = htmlspecialchars($_POST["totalPrice"]);
+    $deliveryCost = htmlspecialchars($_POST["deliveryCost"]);
+    $finalTotal = htmlspecialchars($_POST["finalTotal"]);
 
-    // البيانات المرسلة من النموذج
-    $name = htmlspecialchars($_POST["name"]);
-    $location = htmlspecialchars($_POST["location"]);
-    $order = htmlspecialchars($_POST["order"]);
+    $mapLink = "https://www.google.com/maps?q=$lat,$lng";
 
-    // نص الرسالة
-    $message = "الاسم: $name\n";
-    $message .= "العنوان: $location\n\n";
-    $message .= "تفاصيل الطلب:\n$order\n";
+    $message = "
+    الاسم: $name\n
+    موقع التوصيل: $mapLink\n
+    تفاصيل الطلب:\n$orderDetails\n
+    السعر بدون توصيل: $totalPrice\n
+    تكلفة التوصيل: $deliveryCost دينار\n
+    السعر الإجمالي: $finalTotal
+    ";
 
-    // من هو مرسل الرسالة (ضروري لتقبل Gmail الرسالة)
-    $headers = "From: omaradel20141234@gmail.com";
+    $headers = "From: info@climoneya.com\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8";
 
-    // إرسال الرسالة
     if (mail($to, $subject, $message, $headers)) {
-        echo "✅ تم إرسال الطلب بنجاح، سيتم التواصل معك قريبًا.";
+        echo "تم إرسال طلبك بنجاح! سيتم التواصل معك قريبًا.";
     } else {
-        echo "❌ حدث خطأ أثناء إرسال الطلب، يرجى المحاولة لاحقًا.";
+        echo "حدث خطأ أثناء إرسال الطلب. حاول مجددًا.";
     }
+} else {
+    echo "طلب غير صالح.";
 }
 ?>
