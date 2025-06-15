@@ -3,116 +3,163 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>كليمنيا - متجر الفواكه والخضروات</title>
+  <title>كليمنيا - متجر فواكه وخضروات</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Cairo', sans-serif;
-      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header img {
+      height: 50px;
     }
     .hero {
-      background-image: url('header-bg.jpg'); /* استبدلها بالصورة التي أرسلتها */
-      background-size: cover;
-      background-position: center;
-      height: 400px;
+      background: url('background.jpg') no-repeat center center/cover;
+      height: 300px;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+    }
+    .hero h1 {
+      position: absolute;
       color: white;
-      font-size: 40px;
-      font-weight: bold;
-      text-shadow: 2px 2px 8px #000;
+      font-size: 32px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
     }
     .products {
       padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
+    }
+    .section-title {
+      font-size: 24px;
+      margin-top: 20px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 10px;
     }
     .product {
       background: white;
       border-radius: 10px;
       padding: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
     .product img {
-      width: 100%;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
       border-radius: 10px;
-    }
-    .product h3 {
-      margin: 10px 0 5px;
-    }
-    .product input {
-      width: 100%;
-      padding: 5px;
-      margin-top: 5px;
+      margin-left: 10px;
     }
     .cart {
       position: fixed;
-      left: 10px;
-      top: 100px;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 10px;
-      width: 200px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      left: 20px;
+      top: 20px;
+      width: 250px;
+      background: white;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+    .cart h3 {
+      margin-top: 0;
+    }
+    .cart-item {
+      font-size: 14px;
+      margin-bottom: 5px;
     }
     .checkout-btn {
-      background: #4CAF50;
-      color: white;
-      padding: 10px;
-      width: 100%;
-      border: none;
       margin-top: 10px;
-      cursor: pointer;
-    }
-    footer {
-      background: #333;
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
       color: white;
+      border: none;
+      border-radius: 5px;
       text-align: center;
-      padding: 15px;
-      margin-top: 20px;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <div class="hero">خذ بضاعتك من كليمنيا!</div>
-
-  <section class="products">
-    <div class="product">
-      <img src="tomato.jpg" alt="طماطم">
-      <h3>طماطم</h3>
-      <p>السعر: 3 د.ل/كغ</p>
-      <input type="number" placeholder="أدخل الوزن بالغرام" min="1">
-      <button>أضف للسلة</button>
-    </div>
-    <div class="product">
-      <img src="apple.jpg" alt="تفاح">
-      <h3>تفاح</h3>
-      <p>السعر: 5 د.ل/كغ</p>
-      <input type="number" placeholder="أدخل الوزن بالغرام" min="1">
-      <button>أضف للسلة</button>
-    </div>
-    <div class="product">
-      <img src="orange.jpg" alt="برتقال">
-      <h3>برتقال</h3>
-      <p>السعر: 4 د.ل/كغ</p>
-      <input type="number" placeholder="أدخل الوزن بالغرام" min="1">
-      <button>أضف للسلة</button>
-    </div>
-  </section>
-
-  <div class="cart">
-    <h4>سلة المشتريات</h4>
-    <ul id="cart-list"></ul>
-    <p>الإجمالي: <span id="total-price">0</span> د.ل</p>
-    <button class="checkout-btn" onclick="window.location.href='checkout.html'">إتمام الشراء</button>
+  <header>
+    <img src="logo.png" alt="شعار كليمنيا">
+  </header>
+  <div class="hero">
+    <h1>خذ بضاعتك</h1>
   </div>
 
-  <footer>
-    <p>اتصل بنا عبر الهاتف: 0912345678</p>
-    <p>التوصيل متاح في طرابلس وما حولها - السعر حسب الموقع</p>
-  </footer>
+  <div class="products">
+    <div class="section-title">الخضروات</div>
+    <div class="product">
+      <img src="tomato.jpg" alt="طماطم">
+      <div>
+        <strong>طماطم</strong><br>
+        3 د.ل / كغ
+        <input type="number" placeholder="الوزن بالغرام" onchange="addToCart('طماطم', 3, this.value)">
+      </div>
+    </div>
+
+    <div class="section-title">الفواكه</div>
+    <div class="product">
+      <img src="apple.jpg" alt="تفاح">
+      <div>
+        <strong>تفاح</strong><br>
+        5 د.ل / كغ
+        <input type="number" placeholder="الوزن بالغرام" onchange="addToCart('تفاح', 5, this.value)">
+      </div>
+    </div>
+  </div>
+
+  <div class="cart">
+    <h3>سلة المشتريات</h3>
+    <div id="cart-items"></div>
+    <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> د.ل</p>
+    <a href="checkout.html" class="checkout-btn">إتمام الشراء</a>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function addToCart(name, pricePerKg, grams) {
+      grams = parseFloat(grams);
+      if (isNaN(grams) || grams <= 0) return;
+      const price = (grams / 1000) * pricePerKg;
+      cart.push({ name, grams, price });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItemsDiv = document.getElementById("cart-items");
+      const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+      let total = 0;
+      cartItemsDiv.innerHTML = '';
+      cartData.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.textContent = `${item.name} - ${item.grams}غ - ${item.price.toFixed(2)} د.ل`;
+        cartItemsDiv.appendChild(div);
+        total += item.price;
+      });
+      document.getElementById('cart-total').textContent = total.toFixed(2);
+    }
+
+    renderCart();
+  </script>
 </body>
 </html>
-
