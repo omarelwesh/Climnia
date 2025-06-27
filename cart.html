@@ -1,1 +1,36 @@
-<!-- محتوى صفحة عربة التسوق -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عربة التسوق - كليمنيا</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    function proceedToCheckout() {
+      window.location.href = 'checkout.html';
+    }
+  </script>
+</head>
+<body class="bg-gray-50">
+  <header class="bg-green-700 text-white p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">كليمنيا</h1>
+    <nav class="space-x-4 space-x-reverse">
+      <a href="index.html" class="hover:underline">الرئيسية</a>
+      <a href="vegetables.html" class="hover:underline">الخضروات</a>
+      <a href="fruits.html" class="hover:underline">الفواكه</a>
+      <a href="contact.html" class="hover:underline">اتصل بنا</a>
+      <a href="cart.html" class="underline font-bold">
+        <img src="cart-icon.png" alt="عربة التسوق" class="inline w-6 h-6" />
+      </a>
+    </nav>
+  </header>
+
+  <main class="p-6 max-w-3xl mx-auto">
+    <h2 class="text-3xl font-bold mb-6 text-center">عربة التسوق</h2>
+    <table class="w-full text-right border">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2">المنتج</th>
+          <th class="p-2">الكمية (كجم)</th>
+          <th class="p-2">السعر للوحدة</th>
+          <th class="p-2">الإجمالي</th>
