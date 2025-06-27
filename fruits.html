@@ -1,1 +1,36 @@
-<!-- محتوى صفحة الفواكه -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فواكه - كليمنيا</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-pink-50">
+  <header class="bg-green-700 text-white p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">كليمنيا</h1>
+    <nav class="space-x-4 space-x-reverse">
+      <a href="index.html" class="hover:underline">الرئيسية</a>
+      <a href="vegetables.html" class="hover:underline">الخضروات</a>
+      <a href="fruits.html" class="underline font-bold">الفواكه</a>
+      <a href="contact.html" class="hover:underline">اتصل بنا</a>
+      <a href="cart.html">
+        <img src="cart-icon.png" alt="عربة التسوق" class="inline w-6 h-6" />
+      </a>
+    </nav>
+  </header>
+
+  <main class="p-6">
+    <h2 class="text-3xl font-bold mb-4">الفواكه</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <!-- عنصر: تفاح -->
+      <div class="bg-white p-4 rounded shadow">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg" alt="تفاح" class="w-full h-32 object-cover rounded mb-2">
+        <h3 class="text-lg font-semibold">تفاح</h3>
+        <input type="number" placeholder="كم كجم؟" class="border w-full p-1 mt-2">
+        <button class="bg-green-600 text-white mt-2 px-3 py-1 rounded w-full">ضع في العربة</button>
+      </div>
+
+      <!-- عنصر: موز -->
+      <div class="bg-white p-4 rounded shadow">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg" alt="موز" class="w-full h-32 object-cover rounded mb-2">
